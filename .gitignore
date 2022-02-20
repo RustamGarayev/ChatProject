@@ -1,0 +1,15 @@
+pgdb/
+redisdb/
+.idea/
+media/
+localhost/
+locale/
+venv
+.venv
+db.sqlite3
+*.pyc
+.vscode/sendgrid.env
+**/.DS_Store
+config.env
+.env
+_development/.env

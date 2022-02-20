@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block css %}
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+{% endblock %}
+
+{% block title %}
+    <title>Sign up</title>
+{% endblock %}
+
+{% block content %}
+    <form class="get-started" id="login-screen" method="POST">
+        {% csrf_token %}
+        <p>Registration Page</p>
+        {% for field in form %}
+            <div>
+                {% render_field field placeholder=field.label %}
+                <div></div>
+                <div></div>
+                {% if field.errors %}
+                    {% for error in field.errors %}
+                        <span style="color: red">{{ error }}</span>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <button type="submit" value="login">Sign up</button>
+    </form>
+{% endblock %}
+

@@ -1,0 +1,9 @@
+{% autoescape off %}
+    <b>Please confirm your account activation</b>
+
+<div>Hello, {{ user.get_full_name }},</div>
+<div>You can activate your account by clicking below link</div>
+<div><a href="{{ activation_link }}">Activate</a></div>
+
+<div>or you could open it on your browser: {{ activation_link }}</div>
+{% endautoescape %}

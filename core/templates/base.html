@@ -1,0 +1,42 @@
+{% load static %}
+{% load i18n %}
+{% load l10n %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1, initial-scale=1, user-scalable=no">
+
+        {% block meta %}
+            <meta name="keywords" content="{{news_detail.meta_keywords}}">
+            <meta name="description" content="{{news_detail.meta_description}}">
+        {% endblock %}
+
+        {% block title %}
+            <title>Chat App</title>
+        {% endblock %}
+
+        {% block css %}
+        {% endblock %}
+
+        {% block extra_js %}
+        {% endblock %}
+    </head>
+    <body>
+        {% block header %}
+        {% endblock %}
+
+        {% block content %}
+            <h1>Welcome to my live chat app!</h1>
+        {% endblock %}
+
+        {% block footer %}
+        {% endblock %}
+
+        {% block js %}
+        {% endblock %}
+    </body>
+</html>

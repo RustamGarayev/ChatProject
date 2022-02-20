@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <div class="about">
+        <div class="contRamin">
+            <p class="heading heading--1">
+                Register confirmation
+            </p>
+
+            <div class="panel panel--register panel--gray">
+                <div class="col-md-8">
+                    <p>You account has successfully been activated.</p>
+                    <p>Click the link to log in.</p>
+
+                </div>
+                <div class="col-md-4">
+                    <a href="{% url 'account:login' %}" class="btn btn--blue btn--rounded btn--block btn--lg">Login</a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
