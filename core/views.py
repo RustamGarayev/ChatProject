@@ -1,12 +1,43 @@
-from django.shortcuts import render
 from django.views import generic
+from django.contrib.auth import get_user_model
+from core.models import ChatGroup
+from django.http import Http404
+
+User = get_user_model()
 
 
 class BaseIndexView(generic.TemplateView):
     template_name = 'index.html'
 
+    def get_context_data(self, **kwargs):
+        user = self.request.user
+        context = super(BaseIndexView, self).get_context_data(**kwargs)
 
-def room(request, room_name):
-    return render(request, 'room.html', {
-        'room_name': room_name
-    })
+        context["available_rooms"] = ChatGroup.objects.filter(users=user)
+
+        return context
+
+
+class ChatGroupDetailView(generic.DetailView):
+    model = ChatGroup
+    template_name = "room.html"
+    slug_field = "slug"
+    slug_url_kwarg = "slug"
+
+    def get_object(self, queryset=None):
+        obj = super(ChatGroupDetailView, self).get_object(queryset=queryset)
+        if self.request.user not in obj.users.all():
+            raise Http404()
+        return obj
+
+    def get_queryset(self, **kwargs):
+        queryset = super(ChatGroupDetailView, self).get_queryset()
+        return queryset.filter(group_name=self.kwargs['slug'])
+
+    def get_context_data(self, **kwargs):
+        context = super(ChatGroupDetailView, self).get_context_data(**kwargs)
+        print(self.kwargs)
+
+        context["room_name"] = "test"
+
+        return context

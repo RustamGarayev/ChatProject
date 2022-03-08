@@ -2,6 +2,7 @@ from django.db import models
 from core.tools.helpers import COUNTRIES, get_group_icon
 from django.contrib.sites.models import Site
 from django.contrib.auth import get_user_model
+from core.utils.mixins import ChatGroupMixin
 
 User = get_user_model()
 
@@ -22,12 +23,34 @@ class Message(models.Model):
         return Message.objects.filter(group=self.group)[:10]
 
 
-class ChatGroup(models.Model):
+class ChatGroup(models.Model, ChatGroupMixin):
+    users = models.ManyToManyField(User, related_name="group_users", null=True, blank=True)
     group_name = models.CharField(max_length=20)
+    slug = models.SlugField(max_length=20, unique=True, null=True, blank=True)
     icon = models.ImageField(upload_to=get_group_icon, blank=True, default="client/assets/group_icon.png")
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.group_name
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.cache_group_name = self.group_name
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+
+        # Set unique slug when object is created or its group name is changed
+        self.__set_slug__()
+
+        return super().save(
+            force_insert=force_insert,
+            force_update=force_update,
+            using=using,
+            update_fields=update_fields,
+        )
 
 
 class PhonePrefix(models.Model):

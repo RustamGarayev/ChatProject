@@ -7,7 +7,13 @@
     What chat room would you like to enter?<br>
     <input id="room-name-input" type="text" size="100"><br>
     <input id="room-name-submit" type="button" value="Enter">
-    <a href="{% url 'core:room' room_name='lobby' %}">Index</a>
+    <a href="{% url 'core:index' %}">Index</a>
+
+    <div class="available-rooms">
+        {% for group in available_rooms %}
+            <a href="{% url 'core:room' slug=group.slug %}">{{ group.group_name }}</a>
+        {% endfor %}
+    </div>
 {% endblock %}
 
 {% block js %}

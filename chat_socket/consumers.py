@@ -8,12 +8,22 @@ class ChatConsumer(WebsocketConsumer):
         super().__init__(*args, **kwargs)
         self.room_name = room_name
         self.room_group_name = room_group_name
+        self.commands = {
+            'fetch_messages': self.fetch_messages,
+            'new_message': self.new_message
+        }
+
+    def fetch_messages(self, data):
+        pass
+
+    def new_message(self, data):
+        print('new message')
+        pass
 
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'chat_%s' % self.room_name
 
-        # Join room group
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
             self.channel_name
@@ -22,18 +32,17 @@ class ChatConsumer(WebsocketConsumer):
         self.accept()
 
     def disconnect(self, close_code):
-        # Leave room group
         async_to_sync(self.channel_layer.group_discard)(
             self.room_group_name,
             self.channel_name
         )
 
-    # Receive message from WebSocket
     def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json['message']
+        data = json.loads(text_data)
 
-        # Send message to room group
+        self.commands[data['command']](self, data)
+
+    def send_chat_message(self, message):
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
@@ -42,11 +51,9 @@ class ChatConsumer(WebsocketConsumer):
             }
         )
 
-    # Receive message from room group
     def chat_message(self, event):
         message = event['message']
 
-        # Send message to WebSocket
         self.send(text_data=json.dumps({
             'message': message
         }))

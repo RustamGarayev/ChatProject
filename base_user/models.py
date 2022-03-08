@@ -6,7 +6,7 @@ from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.postgres.fields import JSONField
+from django.db.models import JSONField
 from django.contrib.sites.models import Site
 from django.core.mail import send_mail
 from django.db import models
@@ -49,7 +49,6 @@ class MyUserManager(UserManager):
         return self._create_user(email, password, **extra_fields)
 
 
-# Customize User model
 class MyUser(AbstractBaseUser, PermissionsMixin, MyUserMixin):
     """
     An abstract base class implementing a fully featured User model with
