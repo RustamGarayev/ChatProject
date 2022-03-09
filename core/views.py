@@ -36,8 +36,10 @@ class ChatGroupDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ChatGroupDetailView, self).get_context_data(**kwargs)
-        print(self.kwargs)
 
-        context["room_name"] = "test"
+        user = self.request.user
+
+        context['room_name'] = self.kwargs['slug']
+        context["available_rooms"] = ChatGroup.objects.filter(users=user)
 
         return context

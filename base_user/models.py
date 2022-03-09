@@ -62,8 +62,8 @@ class MyUser(AbstractBaseUser, PermissionsMixin, MyUserMixin):
     email = models.EmailField(
         _("email address"), max_length=255, unique=True, db_index=True
     )
-    profile_picture = models.ImageField(
-        upload_to=get_user_profile_photo_file_name, null=True, blank=True
+    profile_picture = models.FileField(
+        upload_to=get_user_profile_photo_file_name, default="client/assets/user_icon.svg", blank=True
     )
     phone_prefix = models.ForeignKey(
         "core.PhonePrefix",
