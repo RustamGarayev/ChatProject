@@ -30,10 +30,6 @@ class ChatGroupDetailView(generic.DetailView):
             raise Http404()
         return obj
 
-    def get_queryset(self, **kwargs):
-        queryset = super(ChatGroupDetailView, self).get_queryset()
-        return queryset.filter(group_name=self.kwargs['slug'])
-
     def get_context_data(self, **kwargs):
         context = super(ChatGroupDetailView, self).get_context_data(**kwargs)
 

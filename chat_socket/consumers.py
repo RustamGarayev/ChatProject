@@ -21,7 +21,8 @@ class ChatConsumer(WebsocketConsumer):
     @staticmethod
     def __message_to_json(message):
         return {
-            'user': message.user.email,
+            'email': message.user.email,
+            'username': message.user.get_full_name(),
             'group': message.group.slug,
             'message': message.message,
             'timestamp': message.timestamp.strftime('%a %H:%M  %d/%m/%y')

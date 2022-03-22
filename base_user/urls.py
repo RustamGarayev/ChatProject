@@ -23,7 +23,9 @@ urlpatterns = [
         auth_views.LogoutView.as_view(next_page=reverse_lazy("core:index")),
         name="logout",
     ),
-
+    path(
+        "account/", views.AccountUpdateView.as_view(), name="account-update"
+    ),
     # Account forgot password
     path("forget/", views.ForgetPasswordView.as_view(), name="forget"),
     path("forget/done/", views.ForgetPasswordDoneView.as_view(), name="forget-done"),

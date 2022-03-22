@@ -176,6 +176,10 @@ class AccountRegistrationDoneView(AuthView, generic.TemplateView):
         return context
 
 
+class AccountUpdateView(generic.TemplateView):
+    pass
+
+
 class ForgetPasswordView(AuthView, views.PasswordResetView):
     """
         Forget password view

@@ -175,13 +175,13 @@ class MyUser(AbstractBaseUser, PermissionsMixin, MyUserMixin):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
-    is_order_modal_disabled = models.BooleanField(default=False)
-    is_active_warehouse_modal_disabled = models.BooleanField(default=False)
-    has_accepted_transportation_rules = models.BooleanField(default=False)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
 
     signature = models.ImageField(blank=True, upload_to=get_signature_path)
+
+    facebook_account_url = models.URLField(null=True)
+    instagram_account_url = models.URLField(null=True)
+    twitter_account_url = models.URLField(null=True)
 
     # moderation
     created_at = models.DateTimeField(auto_now_add=True)

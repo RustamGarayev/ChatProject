@@ -1,22 +1,22 @@
 from django.contrib import admin
-from core.models import *
+from core import models
 
 
-@admin.register(Message)
+@admin.register(models.Message)
 class MessageAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(ChatGroup)
+@admin.register(models.ChatGroup)
 class ChatGroupAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(PhonePrefix)
+@admin.register(models.PhonePrefix)
 class PhonePrefixAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(Setting)
+@admin.register(models.Setting)
 class SettingAdmin(admin.ModelAdmin):
     pass
