@@ -2,12 +2,15 @@ from django.views import generic
 from django.contrib.auth import get_user_model
 from core.models import ChatGroup
 from django.http import Http404
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 
 User = get_user_model()
 
 
-class BaseIndexView(generic.TemplateView):
+class BaseIndexView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'index.html'
+    login_url = reverse_lazy('account:login')
 
     def get_context_data(self, **kwargs):
         user = self.request.user

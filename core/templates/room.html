@@ -14,7 +14,6 @@
 {% block extra_js %}
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="https://use.typekit.net/hoy3lrg.js"></script>
-    <script>try{Typekit.load({ async: true });}catch(e){}</script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 {% endblock %}
@@ -73,7 +72,7 @@
                                     {% if group.icon %}
                                             <img src="{{ group.icon.url }}" alt="{{ group.slug }}_icon" />
                                     {% else %}
-                                        <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
+                                        <img src="{% static 'client/assets/user-icon.svg' %}" alt="" />
                                     {% endif %}
                                     <div class="meta">
                                         <p class="name">{{ group.group_name }}</p>

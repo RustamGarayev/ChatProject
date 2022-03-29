@@ -35,6 +35,7 @@ document.querySelector('#chat-message-submit').onclick = function(e) {
         'group_name': roomName
     }));
 
+    document.querySelector('.preview').innerHTML = message;
     messageInputDom.value = '';
 };
 

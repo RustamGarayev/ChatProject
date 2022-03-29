@@ -36,6 +36,7 @@ class ChatConsumer(WebsocketConsumer):
 
         context = {
             'messages': self.__messages_to_json(messages),
+            'last_message': Message.objects.filter(group__slug=data['group_name']).last().message,
             'command': 'fetch_messages',
         }
 
