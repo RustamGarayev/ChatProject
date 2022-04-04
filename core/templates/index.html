@@ -3,39 +3,109 @@
 {% load i18n %}
 {% load l10n %}
 
-{% block content %}
-    What chat room would you like to enter?<br>
-    <label for="room-name-input">Room name</label>
-    <input id="room-name-input" type="text" size="100"><br>
-    <button id="room-name-submit">
-        Enter
-    </button>
-    <a href="{% url 'core:index' %}">Index</a>
+{% block css %}
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,300' rel='stylesheet' type='text/css'>
+    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'>
+    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="{% static 'client/css/chat_app/room.css' %}">
+{% endblock %}
 
-    <div class="available-rooms">
-        {% for group in available_rooms %}
-            <a href="{% url 'core:room' slug=group.slug %}">{{ group.group_name }}</a>
-        {% endfor %}
+{% block extra_js %}
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://use.typekit.net/hoy3lrg.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+{% endblock %}
+
+{% block content %}
+    <div id="frame">
+        <div id="sidepanel">
+            <div id="profile">
+                <div class="wrap">
+                    <img id="profile-img"
+                        src="{% if request.user.profile_picture %}{{ request.user.profile_picture.url }}{% else %}{% endif %}"
+                        class="online" alt="" />
+                    <p>{{ request.user }}</p>
+                    <i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>
+                    <div id="status-options">
+                        <ul>
+                            <li id="status-online" class="active">
+                                <span class="status-circle"></span>
+                                <p>Online</p>
+                            </li>
+                            <li id="status-away">
+                                <span class="status-circle"></span>
+                                <p>Away</p>
+                            </li>
+                            <li id="status-busy">
+                                <span class="status-circle"></span>
+                                <p>Busy</p>
+                            </li>
+                            <li id="status-offline">
+                                <span class="status-circle"></span>
+                                <p>Offline</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div id="expanded">
+                        <label for="twitter"><i class="fa fa-facebook fa-fw" aria-hidden="true"></i></label>
+                        <input name="twitter" type="text" value="mikeross" />
+                        <label for="twitter"><i class="fa fa-twitter fa-fw" aria-hidden="true"></i></label>
+                        <input name="twitter" type="text" value="ross81" />
+                        <label for="twitter"><i class="fa fa-instagram fa-fw" aria-hidden="true"></i></label>
+                        <input name="twitter" type="text" value="mike.ross" />
+                    </div>
+                </div>
+            </div>
+            <div id="search">
+                <label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
+                <input type="text" placeholder="{% trans 'Search contacts...' %}" />
+            </div>
+            <div id="contacts">
+                <ul>
+                    {% for group in available_rooms %}
+                        <li class="contact">
+                            <div class="wrap">
+                                <span class="contact-status online"></span>
+                                <a href="{% url 'core:room' slug=group.slug %}">
+                                    {% if group.icon %}
+                                            <img src="{{ group.icon.url }}" alt="{{ group.slug }}_icon" />
+                                    {% else %}
+                                        <img src="{% static 'client/assets/user-icon.svg' %}" alt="" />
+                                    {% endif %}
+                                    <div class="meta">
+                                        <p class="name">{{ group.group_name }}</p>
+                                        <p class="preview">{{ group.get_last_message }}</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div id="bottom-bar">
+                <button id="addcontact"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i>
+                    <span>{% trans 'Add contact' %}</span>
+                </button>
+                {% if request.user.profile %}
+                    <button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i>
+                        <span>{% trans 'Settings' %}</span>
+                    </button>
+                {% else %}
+                    <button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i>
+                        <span>{% trans 'Setup Profile' %}</span>
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="content">
+        </div>
     </div>
 {% endblock %}
 
 {% block js %}
-    <script>
-        document.querySelector('#room-name-input').focus();
-        document.querySelector('#room-name-input').onkeyup = function(e) {
-            if (e.keyCode === 13) {
-                document.querySelector('#room-name-submit').click();
-            }
-        };
-
-        document.querySelector('#room-name-submit').onclick = function(e) {
-            let roomName = document.querySelector('#room-name-input').value;
-            if (roomName !== ""){
-                window.location.pathname = '/chat/' + roomName + '/';
-            } else {
-                alert('Please enter correct room name')
-            }
-
-        };
-    </script>
+    <script src="{% static 'client/js/chat_app/room.js' %}"></script>
+    <script src="{% static 'client/js/reconnecting-websocket.js' %}"></script>
 {% endblock %}
