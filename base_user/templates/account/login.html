@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 {% load widget_tweaks %}
 
 {% block css %}
@@ -7,13 +8,13 @@
 {% endblock %}
 
 {% block title %}
-    <title>Login</title>
+    <title>{% trans 'Login' %}</title>
 {% endblock %}
 
 {% block content %}
     <form class="get-started" id="login-screen" method="POST">
         {% csrf_token %}
-        <p>Login Page</p>
+        <p>{% trans 'Login Page' %}</p>
         {% for field in form %}
             <div>
                 {% render_field field placeholder=field.label %}
@@ -25,7 +26,7 @@
             </div>
         {% endfor %}
 
-        <button type="submit" value="login">Login</button>
+        <button type="submit" value="login">{% trans 'Login' %}</button>
     </form>
 {% endblock %}
 

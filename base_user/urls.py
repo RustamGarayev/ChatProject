@@ -26,6 +26,9 @@ urlpatterns = [
     path(
         "account/", views.AccountUpdateView.as_view(), name="account-update"
     ),
+    path(
+        "add_contact/", views.AddContactView.as_view(), name="add_contact"
+    ),
     # Account forgot password
     path("forget/", views.ForgetPasswordView.as_view(), name="forget"),
     path("forget/done/", views.ForgetPasswordDoneView.as_view(), name="forget-done"),

@@ -21,83 +21,8 @@
 {% block content %}
     <div id="frame">
         <div id="sidepanel">
-            <div id="profile">
-                <div class="wrap">
-                    <img id="profile-img"
-                        src="{% if request.user.profile_picture %}{{ request.user.profile_picture.url }}{% else %}{% endif %}"
-                        class="online" alt="" />
-                    <p>{{ request.user }}</p>
-                    <i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>
-                    <div id="status-options">
-                        <ul>
-                            <li id="status-online" class="active">
-                                <span class="status-circle"></span>
-                                <p>Online</p>
-                            </li>
-                            <li id="status-away">
-                                <span class="status-circle"></span>
-                                <p>Away</p>
-                            </li>
-                            <li id="status-busy">
-                                <span class="status-circle"></span>
-                                <p>Busy</p>
-                            </li>
-                            <li id="status-offline">
-                                <span class="status-circle"></span>
-                                <p>Offline</p>
-                            </li>
-                        </ul>
-                    </div>
-                    <div id="expanded">
-                        <label for="twitter"><i class="fa fa-facebook fa-fw" aria-hidden="true"></i></label>
-                        <input name="twitter" type="text" value="mikeross" />
-                        <label for="twitter"><i class="fa fa-twitter fa-fw" aria-hidden="true"></i></label>
-                        <input name="twitter" type="text" value="ross81" />
-                        <label for="twitter"><i class="fa fa-instagram fa-fw" aria-hidden="true"></i></label>
-                        <input name="twitter" type="text" value="mike.ross" />
-                    </div>
-                </div>
-            </div>
-            <div id="search">
-                <label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
-                <input type="text" placeholder="{% trans 'Search contacts...' %}" />
-            </div>
-            <div id="contacts">
-                <ul>
-                    {% for group in available_rooms %}
-                        <li class="contact">
-                            <div class="wrap">
-                                <span class="contact-status online"></span>
-                                <a href="{% url 'core:room' slug=group.slug %}">
-                                    {% if group.icon %}
-                                            <img src="{{ group.icon.url }}" alt="{{ group.slug }}_icon" />
-                                    {% else %}
-                                        <img src="{% static 'client/assets/user-icon.svg' %}" alt="" />
-                                    {% endif %}
-                                    <div class="meta">
-                                        <p class="name">{{ group.group_name }}</p>
-                                        <p class="preview">{{ group.get_last_message }}</p>
-                                    </div>
-                                </a>
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <div id="bottom-bar">
-                <button id="addcontact"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i>
-                    <span>{% trans 'Add contact' %}</span>
-                </button>
-                {% if request.user.profile %}
-                    <button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i>
-                        <span>{% trans 'Settings' %}</span>
-                    </button>
-                {% else %}
-                    <button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i>
-                        <span>{% trans 'Setup Profile' %}</span>
-                    </button>
-                {% endif %}
-            </div>
+            {% include 'partials/__profile_partials.html' %}
+            {% include 'partials/__contacts_partials.html' %}
         </div>
 
         <div class="content">

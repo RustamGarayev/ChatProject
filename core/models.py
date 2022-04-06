@@ -26,9 +26,11 @@ class Message(models.Model):
 
 class ChatGroup(models.Model, ChatGroupMixin):
     users = models.ManyToManyField(MyUser, related_name="group_users", blank=True)
-    group_name = models.CharField(max_length=20)
-    slug = models.SlugField(max_length=20, unique=True, null=True, blank=True)
+    group_name = models.CharField(max_length=40)
+    slug = models.SlugField(max_length=40, unique=True, null=True, blank=True)
     icon = models.ImageField(upload_to=get_group_icon, blank=True, default="client/assets/group_icon.png")
+
+    is_contact = models.BooleanField(default=False, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load i18n %}
+
+{% block title %}
+    <title>{% trans 'Add Contact' %}</title>
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            {% comment %}
+                {% for user in object_list %}
+                    <input type="checkbox" id="user-checkbox-{{ forloop.counter }}" name="user-{{ forloop.counter }}" value="{{ user.email }}">
+                    <label for="user-checkbox-{{ forloop.counter }}">{{ user.get_full_name }} -- {{ user.email }}</label><br>
+                {% endfor %}
+            {% endcomment %}
+            <input name="email" type="email" placeholder="{% trans 'Enter the email of the user that you want to connect..' %}">
+        </div>
+        <button type="submit">{% trans 'Submit' %}</button>
+    </form>
+{% endblock %}
+

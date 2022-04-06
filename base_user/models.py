@@ -90,6 +90,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin, MyUserMixin):
     current_sign_in_ip = models.GenericIPAddressField(blank=True, null=True)
     last_sign_in_ip = models.GenericIPAddressField(blank=True, null=True)
     sign_in_count = models.IntegerField(default=0)
+    contacts = models.ManyToManyField('self', related_name="contacts", blank=True)
 
     is_staff = models.BooleanField(
         _("staff status"),

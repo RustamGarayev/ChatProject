@@ -1,11 +1,12 @@
 import logging
-import ssl
 import bcrypt
 import sendgrid
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import views
+from django.core.exceptions import ValidationError
+from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.urls.base import reverse
@@ -18,14 +19,14 @@ from base_user.tools.login_helper_view import AuthView
 from base_user.tools.token import account_activation_token
 from base_user.models import UserActivation
 
-from sendgrid.helpers.mail import *
+from core import models as cm
+
+from sendgrid.helpers.mail import Content, Mail, Email, Personalization
 from chat_app.settings import SENDGRID_API_KEY, EMAIL_HOST_USER
 
 
 User = get_user_model()
 logr = logging.getLogger(__name__)
-
-ssl._create_default_https_context = ssl._create_unverified_context
 
 
 class AccountBaseLoginView(AuthView, views.LoginView):
@@ -178,6 +179,55 @@ class AccountRegistrationDoneView(AuthView, generic.TemplateView):
 
 class AccountUpdateView(generic.TemplateView):
     pass
+
+
+class AddContactView(generic.ListView):
+    model = User
+    template_name = 'account/add-contact.html'
+    success_url = reverse_lazy('core:index')
+
+    def get_queryset(self):
+        return super(AddContactView, self).get_queryset().exclude(id=self.request.user.id)
+
+    def post(self, request, *args, **kwargs):
+        form_email = request.POST.get('email', None)
+        if request.user.email == form_email:
+            raise ValidationError('You cannot add yourself as a contact')
+        elif self.get_queryset().filter(email=form_email).exists():
+            user = User.objects.get(email=form_email)
+
+            if all([
+                user in request.user.contacts.all(),
+                cm.ChatGroup.objects.filter(
+                    group_name=f"{request.user.client_code}_{user.client_code}").exists()
+            ]):
+                raise ValidationError('You already have this contact')
+            else:
+                request.user.contacts.add(user)
+                request.user.save()
+
+            self.__create_chat(request.user, user)
+            return redirect(self.success_url)
+        else:
+            raise ValidationError('User does not exist')
+
+    def get_context_data(self, **kwargs):
+        context = super(AddContactView, self).get_context_data(**kwargs)
+
+        return context
+
+    @staticmethod
+    def __create_chat(user1, user2):
+        chat, created = cm.ChatGroup.objects.get_or_create(
+            group_name=f"{user1.client_code}_{user2.client_code}"
+        )
+
+        if created:
+            chat.users.set([user1.id, user2.id])
+            chat.is_contact = True
+            chat.save()
+
+        return chat
 
 
 class ForgetPasswordView(AuthView, views.PasswordResetView):
